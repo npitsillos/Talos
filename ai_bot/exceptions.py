@@ -1,0 +1,2 @@
+class EnvironmentIsNotSupportedException(Exception):
+    pass

@@ -7,6 +7,8 @@ from discord.ext.commands import Bot
 from discord.ext import commands
 
 from help_info import *
+from utils import *
+from extensions import Env
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -56,7 +58,12 @@ async def help(ctx, *params):
 async def contribute(ctx):
     await ctx.channel.send("Κάμε με πιο έξυπνο! https://github.com/npitsillos/Talos")
 
+@bot.command()
+async def envs(ctx):
+    await ctx.channel.send("Προτιμώ τα Atari αλλά τέλος πάντων... {}".format(" ".join(supported_envs)))
+
 def run_bot():
+    bot.add_cog(Env(bot))
     bot.run(token)
 
 if __name__ == "__main__":
