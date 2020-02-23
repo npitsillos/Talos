@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  bot:
+    build: .
+    container_name: 'talosbot'
+    environment:
+      TALOS_TOKEN: ${TALOS_TOKEN}
+    restart: always
+    volumes:
+      - ./ai_bot:/ai_bot
+    working_dir: /ai_bot
+    command: python -u bot.py

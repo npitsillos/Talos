@@ -19,8 +19,8 @@ bot = Bot(command_prefix="!", help_command=None)
 @bot.event
 async def on_ready():
     logger.info(bot.user.name + " is online...")
-    activity = discord.Activity(name="Developing general AI! Use !help", type=discord.ActicityType.custom)
-    await bot.change_presence(status=discord.Status.online, activity=activity)
+    activity = discord.Game(name="Atari games to learn! Use !help")
+    await bot.change_presence(activity=activity)
 
 @bot.event
 async def on_message(message):
@@ -51,6 +51,10 @@ async def help(ctx, *params):
                 await send_help_page(ctx, key)
     else:
         await ctx.channel.send("Στείλε DM ρεεε να μεν μας θωρούν ούλλοι!")
+
+@bot.command()
+async def contribute(ctx):
+    await ctx.channel.send("Κάμε με πιο έξυπνο! https://github.com/npitsillos/Talos")
 
 def run_bot():
     bot.run(token)

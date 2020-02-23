@@ -1,6 +1,6 @@
 help_dict = {}
 
-help_dict["help"] = '''
+help_dict["general"] = '''
 !help [comand-list]
 Display the help message for every command
 
