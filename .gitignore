@@ -1,3 +1,4 @@
 .python-version
 .env
 docker-compose-with-reloading.yml
+__pycache__/

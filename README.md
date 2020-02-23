@@ -11,6 +11,11 @@ The bot runs when a command is issued that is prefixed with an exclamation mark 
 
 ```!contribute``` returns the link to Talos's Github repository.
 
+### Env Command
+```!env describe <env-name>``` Describes the environment providing details about the action and observation space.
+
+```!env train <env-name> [params]``` Trains a basic agent with default or provided params on the specified environment.
+
 ## Contributors
 * [npitsillos](https://github.com/npitsillos)
 
