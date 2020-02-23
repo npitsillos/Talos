@@ -17,19 +17,27 @@ class Env(commands.Cog):
     async def env(self, ctx):
         self.guild = ctx.guild
         self.gid = ctx.guild.id
-        
+
         if ctx.invoked_subcommand is None:
             await ctx.send("Εν ξέρω έτσι πράμα. Use !help")
     
     @env.command()
     async def describe(self, ctx, *params):
         env_name = list(params)[0].lower()
-        if env_name not in SUPPORTED_ENVS: raise EnvironmentIsNotSupportedException
+        if env_name not in SUPPORTED_ENVS.keys(): raise EnvironmentIsNotSupportedException
         env_dict = get_env_details(env_name)
-        gym_name = list(env_dict.keys())[0]
+        gym_name = env_dict["name"]
+        description = "States: \n{} \
+                        \n\n \
+                        Observation Space: {}\n \
+                        Action Space: {}".format("\n".join(["->".join(list(t)) for t in env_dict["states"].items()]), env_dict["obs_space"], env_dict["action_space"])
         embed = discord.Embed(
             title=gym_name,
-            description="Observation Space: {}\nAction Space: {}".format(env_dict[gym_name]["obs_space"], env_dict[gym_name]["action_space"]),
+            description=description,
             colour=discord.Colour.blue()
         )
         await ctx.send(embed=embed)
+
+    @env.command()
+    async def train(self, ctx, *params):
+        print(params)
