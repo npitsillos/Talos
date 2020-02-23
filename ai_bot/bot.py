@@ -60,7 +60,7 @@ async def contribute(ctx):
 
 @bot.command()
 async def envs(ctx):
-    await ctx.channel.send("Προτιμώ τα Atari αλλά τέλος πάντων... {}".format(" ".join(supported_envs)))
+    await ctx.channel.send("Προτιμώ τα Atari αλλά τέλος πάντων... {}".format(" ".join(list(SUPPORTED_ENVS.keys()))))
 
 def run_bot():
     bot.add_cog(Env(bot))
