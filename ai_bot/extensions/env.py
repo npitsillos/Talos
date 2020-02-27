@@ -41,9 +41,9 @@ class Env(commands.Cog):
     @env.command()
     async def train(self, ctx, *params):
         env_name = list(params)[0].lower()
-        if env_name not in SUPPORTED_ENVS.keys(): raise EnvironmentIsNotSupportedException
-        await train_on_env(ctx, self.train_callback, params)
-        await self.train_callback(ctx)
-    
-    async def train_callback(self, ctx):
+        if not check_supported_envs(env_name): raise EnvironmentIsNotSupportedException
+        agent = Agent(env_name)
+        await agent.train_agent()
+        # await train_on_env(ctx, self.train_callback, params)
         await ctx.author.send("Eteliosaaa")
+    

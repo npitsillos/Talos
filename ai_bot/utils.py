@@ -5,6 +5,7 @@ import numpy as np
 EPISODES = 1000
 MAX_EPSILON = 0.99
 MIN_EPSILON = 0.01
+EPSILON = 0.99
 MAX_STEPS = 99
 DECAY_RATE = 0.005
 GAMMA = 0.95
@@ -39,47 +40,64 @@ def get_env_details(env_name, **kwargs):
 
     return return_dict
 
-async def train_on_env(ctx, callback, params):
-    ''' Trains a simple agent on the specified environment
-        given the specified parameters in *params
+def check_supported_envs(env_name):
+    return env_name in SUPPORTED_ENVS
+
+class Agent():
+    ''' Represent an Agent that is trained on an environment.
+        This class is created to maintain a reference to the 
+        converged Q-table among other things.
     '''
-    rewards = []
-    episode = 0
-    env_name = list(params)[0].lower()
-    env = gym.make(SUPPORTED_ENVS[env_name]["name"])
-    actions = env.action_space.n
-    states = env.observation_space.n
+    def __init__(self, env_name, **kwargs):
+        self.env_name = SUPPORTED_ENVS[env_name]["name"]
+        if len(kwargs) == 0:
+            self.init_default_agent()
+        else:
+            for key in kwargs.keys():
+                self.__setattr__(self, key, kwargs[key])
 
-    q_table = np.zeros((states, actions))
-    epsilon = MAX_EPSILON
-    for episode in range(EPISODES):
-        print(episode)
-        # Reset environment
-        state = env.reset()
-        step = 0
-        done = False
-        total_rewards = 0
+    def init_default_agent(self):
+        self.episodes = EPISODES
+        self.max_epsilon = MAX_EPSILON
+        self.min_epsilon = MIN_EPSILON
+        self.max_steps = MAX_STEPS
+        self.alpha = ALPHA
+        self.decay_rate = DECAY_RATE
+        self.gamma = GAMMA
 
-        for step in range(MAX_STEPS):
-            # Choose and take action
-            if np.random.sample() > epsilon:
-                # Take action from q_table that is action that will give highest discounted reward
-                action = np.argmax(q_table[state, :])
-            else:
-                action = env.action_space.sample()
-            
-            new_state, reward, done, info = env.step(action)
+    async def train_agent(self):
+        env = gym.make(self.env_name)
+        rewards = []
+        episode = 0
+        self.q_table = np.zeros((env.observation_space.n, env.action_space.n))
+        epsilon = self.max_epsilon
+        for episode in range(self.episodes):
+            # Reset environment
+            state = env.reset()
+            step = 0
+            done = False
+            total_rewards = 0
 
-            # Update the Q table
-            q_table[state, action] = q_table[state, action] + ALPHA * (reward + GAMMA * np.max(q_table[new_state, :]) - q_table[state, action])
+            for step in range(self.max_steps):
+                # Choose and take action
+                if np.random.sample() > epsilon:
+                    # Take action from q_table that is action that will give highest discounted reward
+                    action = np.argmax(self.q_table[state, :])
+                else:
+                    action = env.action_space.sample()
+                
+                new_state, reward, done, info = env.step(action)
 
-            total_rewards += reward
-            state = new_state
+                # Update the Q table
+                self.q_table[state, action] = self.q_table[state, action] + self.alpha * (reward + self.gamma * np.max(self.q_table[new_state, :]) - self.q_table[state, action])
 
-            if done:
-                break
-            
-        epsilon = MIN_EPSILON + (MAX_EPSILON - MIN_EPSILON)*np.exp(-DECAY_RATE*episode)
-        rewards.append(total_rewards)
-    print ("Score over time: " +  str(sum(rewards)/EPISODES))
-    print(q_table)
+                total_rewards += reward
+                state = new_state
+
+                if done:
+                    break
+                
+            epsilon = self.min_epsilon + (self.max_epsilon - self.min_epsilon)*np.exp(-self.decay_rate*episode)
+            rewards.append(total_rewards)
+        print ("Score over time: " +  str(sum(rewards)/EPISODES))
+        print(self.q_table)
