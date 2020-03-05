@@ -6,3 +6,6 @@ class AgentAlreadyExistsException(Exception):
 
 class NotInCorrectCategoryChannelException(Exception):
     pass
+
+class EnvrionmentNameNotProvided(Exception):
+    pass

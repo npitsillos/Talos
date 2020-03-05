@@ -70,26 +70,32 @@ class Env(commands.Cog):
             await testing_channel.send("Κοπέλια έμαθα τα ούλλα.")
 
         except EnvironmentIsNotSupportedException:
-            await ctx.channel.send("Ένεκαμα τρέιν τζαμέ κόμα.  Try another environemnt or use !help!")
+            await ctx.channel.send("Έντο ξέρω τούτο.  Try another environemnt or use !help!")
         except AgentAlreadyExistsException:
             await ctx.channel.send("Ρε κουμπάρε μόλις τωρά ετέλιοσα! Άησμε να πνάσω. Try another environemnt or use !help!")
 
     @env.command()
     async def test(self, ctx, *params):
         try:
+            if ctx.channel.category.name not in ctx.channel.name: raise NotInCorrectCategoryChannelException
+            if len(list(params)) == 0: raise EnvrionmentNameNotProvided
             env_name = list(params)[0].lower()
             if not is_supported(env_name): raise EnvironmentIsNotSupportedException
             gym_name = get_gym_name(env_name)
             
             agent = self.env_agents[gym_name]
             agent.test()
-        
+        except NotInCorrectCategoryChannelException:
+            await ctx.channel.send("Πρέπει να είσαι channel του category. You have to be in the channel's category!")
+        except EnvrionmentNameNotProvided:
+            await ctx.channel.send("Δώσμου όνομα. Environment name not provided.")
         except EnvironmentIsNotSupportedException:
-            await ctx.channel.send("Ένεκαμα τρέιν τζαμέ κόμα.  Try another environemnt or use !help!")
+            await ctx.channel.send("Έντο ξέρω τούτο.  Try another environemnt or use !help!")
+        
     
     @env.command()
     @commands.has_permissions(manage_channels=True, manage_roles=True)
-    async def delete(self, ctx, *params):
+    async def delete(self, ctx):
         
         try:
             print(ctx.channel.category.name)
