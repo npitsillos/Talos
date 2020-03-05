@@ -16,18 +16,30 @@ SUPPORTED_ENVS = {  "frozenlake":
                             "name": "FrozenLake-v0",
                             "states": {"S": "start point, safe", "F": "frozen tile, safe", "H": "hole, fall to your doom", "G": "goal"}
                         },
-                    "frozenlake8x8":
+                    "frozenlake8":
                         {
                             "name": "FrozenLake8x8-v0",
                             "states": {}
                         },
                 }
 
+def get_supported_envs():
+    envs = []
+    for key in SUPPORTED_ENVS.keys():
+        envs.append(SUPPORTED_ENVS[key]["name"])
+    return envs
+
+def is_supported(env_name):
+    return env_name in SUPPORTED_ENVS
+
+def get_gym_name(env_name):
+    return SUPPORTED_ENVS[env_name]["name"]
+
 def get_env_details(env_name, **kwargs):
     ''' Returns dictionary with correct env name
         containing entries for the action and obs_space
     '''
-    gym_name = SUPPORTED_ENVS[env_name]["name"]
+    gym_name = env_name
     env = gym.make(gym_name)
     obs_space = env.observation_space.n
     action_space = env.action_space.n
@@ -40,16 +52,13 @@ def get_env_details(env_name, **kwargs):
 
     return return_dict
 
-def check_supported_envs(env_name):
-    return env_name in SUPPORTED_ENVS
-
 class Agent():
     ''' Represent an Agent that is trained on an environment.
         This class is created to maintain a reference to the 
         converged Q-table among other things.
     '''
     def __init__(self, env_name, **kwargs):
-        self.env_name = SUPPORTED_ENVS[env_name]["name"]
+        self.env_name = env_name
         if len(kwargs) == 0:
             self.init_default_agent()
         else:
@@ -65,8 +74,9 @@ class Agent():
         self.decay_rate = DECAY_RATE
         self.gamma = GAMMA
 
-    async def train_agent(self):
+    async def train(self):
         env = gym.make(self.env_name)
+        self.env = env
         rewards = []
         episode = 0
         self.q_table = np.zeros((env.observation_space.n, env.action_space.n))
@@ -74,11 +84,10 @@ class Agent():
         for episode in range(self.episodes):
             # Reset environment
             state = env.reset()
-            step = 0
             done = False
             total_rewards = 0
-
-            for step in range(self.max_steps):
+            step = 0
+            while step < self.max_steps:
                 # Choose and take action
                 if np.random.sample() > epsilon:
                     # Take action from q_table that is action that will give highest discounted reward
@@ -86,7 +95,7 @@ class Agent():
                 else:
                     action = env.action_space.sample()
                 
-                new_state, reward, done, info = env.step(action)
+                new_state, reward, done, _ = env.step(action)
 
                 # Update the Q table
                 self.q_table[state, action] = self.q_table[state, action] + self.alpha * (reward + self.gamma * np.max(self.q_table[new_state, :]) - self.q_table[state, action])
@@ -96,8 +105,32 @@ class Agent():
 
                 if done:
                     break
-                
+                step += 1
             epsilon = self.min_epsilon + (self.max_epsilon - self.min_epsilon)*np.exp(-self.decay_rate*episode)
             rewards.append(total_rewards)
         print ("Score over time: " +  str(sum(rewards)/EPISODES))
         print(self.q_table)
+
+    def test(self):
+        self.env.reset()
+
+        for i in range(5):
+            state = self.env.reset()
+            done = False
+            print("****************************************")
+            print("Episode {}".format(i))
+            step = 0
+            while step < self.max_steps:
+
+                action = np.argmax(self.q_table[state, :])
+
+                new_state, reward, done, info = self.env.step(action)
+
+                if done:
+                    self.env.render()
+                    print("Number of steps: {}".format(step))
+                    break
+
+                state = new_state
+                step += 1
+        self.env.close()
