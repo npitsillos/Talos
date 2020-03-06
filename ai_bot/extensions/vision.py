@@ -1,10 +1,13 @@
 import discord
 import logging
+import aiohttp
+import io
 
 from discord.ext import commands
 from mask_rcnn import *
 from helpers import *
 from exceptions import *
+from PIL import Image
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -57,8 +60,14 @@ class Vision(commands.Cog):
             if len(attachments) > 0 and message.channel.name not in get_supported_models(): raise NotInCorrectCategoryChannelException
             # check only 1
             if len(attachments) > 2: raise TooManyImagesException
-            
-            
+            images = []
+            for attachment in attachments:
+                async with aiohttp.ClientSession() as session:
+                    # or use a session you already have
+                    async with session.get(attachment.url) as resp:
+                        images.append(Image.open(io.BytesIO(await resp.read())))
+                        # buffer is a file-like
+            print(images)
         except NotInCorrectCategoryChannelException:
             await message.channel.send("Πρέπει να είσαι σε channel του model που έκαμες. You have to be in the channel's model you created!")
         except TooManyImagesException:
