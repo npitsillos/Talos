@@ -1,4 +1,4 @@
-class EnvironmentIsNotSupportedException(Exception):
+class EnvironmentNotSupportedException(Exception):
     pass
 
 class AgentAlreadyExistsException(Exception):
@@ -7,5 +7,14 @@ class AgentAlreadyExistsException(Exception):
 class NotInCorrectCategoryChannelException(Exception):
     pass
 
-class EnvrionmentNameNotProvided(Exception):
+class EnvironmentNameNotProvidedException(Exception):
+    pass
+
+class ModelNameNotProvidedException(Exception):
+    pass
+
+class ModelNotSupportedException(Exception):
+    pass
+
+class TooManyImagesException(Exception):
     pass
