@@ -1,5 +1,6 @@
 import discord
 import os
+import sys
 import logging
 import datetime
 
@@ -7,11 +8,11 @@ from discord.ext.commands import Bot
 from discord.ext import commands
 
 from help_info import *
-from utils import *
-from extensions import Env
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+extensions = ['env', 'vision']
 
 token = os.getenv("TALOS_TOKEN")
 
@@ -63,7 +64,10 @@ async def envs(ctx):
     await ctx.channel.send("Προτιμώ τα Atari αλλά τέλος πάντων... {}".format(" ".join(list(SUPPORTED_ENVS.keys()))))
 
 def run_bot():
-    bot.add_cog(Env(bot))
+    # Load extensions
+    sys.path.insert(1, os.getcwd() + '/extensions/')
+    for extension in extensions:
+        bot.load_extension(extension)
     bot.run(token)
 
 if __name__ == "__main__":

@@ -1,15 +1,7 @@
-import gym
 import numpy as np
+import gym
 
-# Default params for all toy envs
-EPISODES = 1000
-MAX_EPSILON = 0.99
-MIN_EPSILON = 0.01
-EPSILON = 0.99
-MAX_STEPS = 99
-DECAY_RATE = 0.005
-GAMMA = 0.95
-ALPHA = 0.8
+SUPPORTED_MODELS = ["mask-rcnn"]
 
 SUPPORTED_ENVS = {  "frozenlake":
                         {
@@ -23,13 +15,19 @@ SUPPORTED_ENVS = {  "frozenlake":
                         },
                 }
 
+def get_supported_models():
+    return SUPPORTED_MODELS
+
+def is_model_supported(model):
+    return model in SUPPORTED_MODELS
+
 def get_supported_envs():
     envs = []
     for key in SUPPORTED_ENVS.keys():
         envs.append(SUPPORTED_ENVS[key]["name"])
     return envs
 
-def is_supported(env_name):
+def is_env_supported(env_name):
     return env_name in SUPPORTED_ENVS
 
 def get_gym_name(env_name):
@@ -52,6 +50,17 @@ def get_env_details(env_name, **kwargs):
 
     return return_dict
 
+# Default params for all toy envs
+EPISODES = 1000
+MAX_EPSILON = 0.99
+MIN_EPSILON = 0.01
+EPSILON = 0.99
+MAX_STEPS = 99
+DECAY_RATE = 0.005
+GAMMA = 0.95
+ALPHA = 0.8
+
+# Agent class
 class Agent():
     ''' Represent an Agent that is trained on an environment.
         This class is created to maintain a reference to the 
