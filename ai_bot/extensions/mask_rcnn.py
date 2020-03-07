@@ -33,4 +33,5 @@ class MaskRCNN():
         predictions = []
         with torch.no_grad():
             for image in images:
+                
                 predictions.append(self.model([image.to(self.device)]))
