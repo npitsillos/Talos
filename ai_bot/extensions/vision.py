@@ -16,6 +16,9 @@ class Vision(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.models_created = {}
+        for model in get_supported_models():
+            self.models_created[model] = None
 
     @commands.group()
     async def vision(self, ctx):
@@ -33,9 +36,11 @@ class Vision(commands.Cog):
     async def create(self, ctx, *params):
         try:
             if len(list(params)) == 0: raise ModelNameNotProvidedException
-            if not is_model_supported(list(params)[0].lower()): raise ModelNotSupportedException
-            model = list(params)[0].lower()
-            model_role = await self.guild.create_role(name="Model-" + model, mentionable=True)
+            model_name = list(params)[0].lower()
+            if not is_model_supported(model_name): raise ModelNotSupportedException
+           
+            if self.models_created[model_name] is not None: raise ModelAlreadyExistsException
+            model_role = await self.guild.create_role(name="Model-" + model_name, mentionable=True)
             await ctx.message.author.add_roles(model_role)
             overwrites = {
                 # Everyone
@@ -43,23 +48,26 @@ class Vision(commands.Cog):
                 self.bot.user: discord.PermissionOverwrite(read_messages=True),
                 model_role: discord.PermissionOverwrite(read_messages=True)
             }
-            category = await self.guild.create_category(name=model, overwrites=overwrites)
-            testing_channel = await self.guild.create_text_channel(name=model, category=category)
+            self.models_created[model_name] = MaskRCNN()
+            category = await self.guild.create_category(name=model_name, overwrites=overwrites)
+            testing_channel = await self.guild.create_text_channel(name=model_name, category=category)
             
             await testing_channel.send("Upload an image wih every day objects.")
-            await ctx.channel.send("Κάμε άπλοουντ εικόνα στο channel ({}) να δεις!!!".format(model))
+            await ctx.channel.send("Κάμε άπλοουντ εικόνα στο channel ({}) να δεις!!!".format(model_name))
         except ModelNameNotProvidedException:
-            await ctx.channel.send("Δώσμου όνομα. Environment name not provided.")
+            await ctx.channel.send("Δώσμου όνομα. Model name not provided.")
         except ModelNotSupportedException:
             await ctx.channel.send("Εν καταλάβω...")
-    
-    @commands.Cog.listener()
-    async def on_message(self, message):
+        except ModelAlreadyExistsException:
+            await ctx.channel.send("Ήδη έκαμες το τούτο...")
+
+    @vision.command()
+    async def run(self, ctx):
         try:
-            attachments = message.attachments
-            if len(attachments) > 0 and message.channel.name not in get_supported_models(): raise NotInCorrectCategoryChannelException
-            # check only 1
+            if ctx.message.channel.name not in get_supported_models(): raise NotInCorrectCategoryChannelException
+            attachments = ctx.message.attachments
             if len(attachments) > 2: raise TooManyImagesException
+            
             images = []
             for attachment in attachments:
                 async with aiohttp.ClientSession() as session:
@@ -67,10 +75,10 @@ class Vision(commands.Cog):
                     async with session.get(attachment.url) as resp:
                         images.append(Image.open(io.BytesIO(await resp.read())))
                         # buffer is a file-like
-            print(images)
+            self.models_created[ctx.message.channel.name].predict(images)
         except NotInCorrectCategoryChannelException:
-            await message.channel.send("Πρέπει να είσαι σε channel του model που έκαμες. You have to be in the channel's model you created!")
+            await ctx.channel.send("Πρέπει να είσαι channel του model. You have to be in the mode's category!")
         except TooManyImagesException:
-            await message.channel.send("Όπααα ρεεε! Σιγά σιγά. Too many imagess! Only 2.")
+            await ctx.message.channel.send("Όπααα ρεεε! Σιγά σιγά. Too many imagess! Only 2.")
 def setup(bot):
     bot.add_cog(Vision(bot))

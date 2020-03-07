@@ -18,3 +18,9 @@ class ModelNotSupportedException(Exception):
 
 class TooManyImagesException(Exception):
     pass
+
+class ModelAlreadyExistsException(Exception):
+    pass
+
+class NoImagesAttachedInMessageException(Exception):
+    pass
