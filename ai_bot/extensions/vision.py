@@ -66,6 +66,7 @@ class Vision(commands.Cog):
         try:
             if ctx.message.channel.name not in get_supported_models(): raise NotInCorrectCategoryChannelException
             attachments = ctx.message.attachments
+            if len(attachments) == 0: raise ModelNameNotProvidedException
             if len(attachments) > 2: raise TooManyImagesException
             
             images = []
@@ -78,10 +79,16 @@ class Vision(commands.Cog):
 
             images, predictions = self.models_created[ctx.message.channel.name].predict(images)
             image_path_objects = add_detections_to_images(names, images, predictions)
-        
+
+            for key in image_path_objects.keys():
+                image_file = discord.File(image_path_objects[key]["path"])
+                await ctx.channel.send(file=image_file)
+                await ctx.channel.send("Τούτα ήβρα! " + ','.join(obj for obj in image_path_objects[key]["objects"]))
 
         except NotInCorrectCategoryChannelException:
             await ctx.channel.send("Πρέπει να είσαι channel του model. You have to be in the mode's category!")
+        except ModelNameNotProvidedException:
+            await ctx.channel.send("Εν μου έδωκες εικόνα! No image given.")
         except TooManyImagesException:
             await ctx.message.channel.send("Όπααα ρεεε! Σιγά σιγά. Too many imagess! Only 2.")
 

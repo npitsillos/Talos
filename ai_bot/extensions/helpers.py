@@ -10,7 +10,9 @@ import matplotlib.patches as patches
 from skimage.measure import find_contours
 from matplotlib.patches import Polygon
 
-SAVEPATH = os.path.abspath(os.getcwd())
+SAVEPATH = os.path.abspath("images/")
+if not os.path.exists(SAVEPATH):
+    os.mkdir(SAVEPATH)
 
 SUPPORTED_MODELS = ["mask-rcnn"]
 
@@ -114,8 +116,9 @@ def add_detections_to_images(names, images, predictions):
             continue
         
         colours = random_colours(num_objects)
-        
+        print(image.size())
         image = (image.permute(1, 2, 0).numpy() * 255).astype(np.uint8)
+        print(image.shape)
         masked_image = image.copy()
 
         for i in range(num_objects):

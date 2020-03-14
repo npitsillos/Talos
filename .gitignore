@@ -2,3 +2,4 @@
 .env
 docker-compose-with-reloading.yml
 __pycache__/
+images/
