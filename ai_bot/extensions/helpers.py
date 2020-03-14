@@ -129,7 +129,7 @@ def add_detections_to_images(names, images, predictions):
             masked_image = apply_mask(masked_image, mask, colour)
         
         skimage.io.imsave(image_path_objects[name]["path"], masked_image)
-
+    return image_path_objects
 ##################################
 # RL Agent Details
 ##################################
