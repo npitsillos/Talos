@@ -77,8 +77,8 @@ class Vision(commands.Cog):
                         images.append(Image.open(io.BytesIO(await resp.read())).convert("RGB"))
 
             images, predictions = self.models_created[ctx.message.channel.name].predict(images)
-            masked_images = add_detections_to_images(names, images, predictions)
-
+            image_path_objects = add_detections_to_images(names, images, predictions)
+        
 
         except NotInCorrectCategoryChannelException:
             await ctx.channel.send("Πρέπει να είσαι channel του model. You have to be in the mode's category!")
