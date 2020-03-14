@@ -69,16 +69,22 @@ class Vision(commands.Cog):
             if len(attachments) > 2: raise TooManyImagesException
             
             images = []
+            names = []
             for attachment in attachments:
+                names.append(attachment.filename)
                 async with aiohttp.ClientSession() as session:
-                    # or use a session you already have
                     async with session.get(attachment.url) as resp:
-                        images.append(Image.open(io.BytesIO(await resp.read())))
-                        # buffer is a file-like
-            self.models_created[ctx.message.channel.name].predict(images)
+                        images.append(Image.open(io.BytesIO(await resp.read())).convert("RGB"))
+
+            images, predictions = self.models_created[ctx.message.channel.name].predict(images)
+            masked_images = add_detections_to_images(names, images, predictions)
+
+
         except NotInCorrectCategoryChannelException:
             await ctx.channel.send("Πρέπει να είσαι channel του model. You have to be in the mode's category!")
         except TooManyImagesException:
             await ctx.message.channel.send("Όπααα ρεεε! Σιγά σιγά. Too many imagess! Only 2.")
+
+    
 def setup(bot):
     bot.add_cog(Vision(bot))

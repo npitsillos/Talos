@@ -11,6 +11,7 @@ class MaskRCNN():
         self.model.eval()
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
+        self.transform = torchvision.transforms.ToTensor()
 
     def build_model(self):
          # Define model and change according to our dataset
@@ -30,8 +31,15 @@ class MaskRCNN():
         return model
     
     def predict(self, images):
+        
+        # images is a list of PIL Image objects
+        # so transform to Tensor
+        for i in range(len(images)):
+            images[i] = self.transform(images[i])
+            
         predictions = []
         with torch.no_grad():
             for image in images:
-                
-                predictions.append(self.model([image.to(self.device)]))
+                predictions.append(self.model([image.to(self.device)])[0])
+        
+        return images, predictions
