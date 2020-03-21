@@ -5,18 +5,31 @@
 The bot runs when a command is issued that is prefixed with an exclamation mark (!).
 
 ### General Commands
-```!help``` displays all the supported commands
+```!help``` Displays all the supported commands.
 
-```!envs``` displays currently available environments in gym that Talos can run.
+```!contribute``` Returns the link to Talos's Github repository.
 
-```!contribute``` returns the link to Talos's Github repository.
+### Env Command Group
+```!env ls``` Returns a list with the supported gym environments.
 
-### Env Command
 ```!env describe <env-name>``` Describes the environment providing details about the action and observation space.
 
 ```!env train <env-name> [params]``` Trains a basic agent with default or provided params on the specified environment.
 
+```!env test``` Tests the trained agent for several episodes in its environment.
+
+```!env delete``` Deletes trained agent corresponding to channel.
+
+### Vision Command Group
+```!vision ls``` Returns a list of supported object detection models.
+
+```!vision create <model-name>``` Creates an instance of the specified vision model.
+
+```!vision run``` Carries out prediction on attached image.
+
+```!vision delete``` Deletes instance of vision model corresponding to channel.
+
 ## Contributors
 * [npitsillos](https://github.com/npitsillos)
 
-**Please feel free to contribute**
+# Please feel free to contribute
