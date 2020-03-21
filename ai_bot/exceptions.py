@@ -10,6 +10,9 @@ class NotInCorrectCategoryChannelException(Exception):
 class EnvironmentNameNotProvidedException(Exception):
     pass
 
+class EnvironmentIsNotSupportedException(Exception):
+    pass
+
 class ModelNameNotProvidedException(Exception):
     pass
 

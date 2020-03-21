@@ -46,12 +46,11 @@ def is_env_supported(env_name):
 def get_gym_name(env_name):
     return SUPPORTED_ENVS[env_name]["name"]
 
-def get_env_details(env_name, **kwargs):
+def get_env_details(env_name):
     ''' Returns dictionary with correct env name
         containing entries for the action and obs_space
     '''
-    gym_name = env_name
-    env = gym.make(gym_name)
+    env = gym.make(SUPPORTED_ENVS[env_name]["name"])
     obs_space = env.observation_space.n
     action_space = env.action_space.n
     del env
@@ -116,9 +115,7 @@ def add_detections_to_images(names, images, predictions):
             continue
         
         colours = random_colours(num_objects)
-        print(image.size())
         image = (image.permute(1, 2, 0).numpy() * 255).astype(np.uint8)
-        print(image.shape)
         masked_image = image.copy()
 
         for i in range(num_objects):
@@ -133,6 +130,7 @@ def add_detections_to_images(names, images, predictions):
         
         skimage.io.imsave(image_path_objects[name]["path"], masked_image)
     return image_path_objects
+
 ##################################
 # RL Agent Details
 ##################################

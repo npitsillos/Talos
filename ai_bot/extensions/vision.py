@@ -29,7 +29,7 @@ class Vision(commands.Cog):
             await ctx.send("Εν ξέρω έτσι πράμα. Use !help")
 
     @vision.command()
-    async def models(self, ctx):
+    async def ls(self, ctx):
         await ctx.channel.send("Έλα ρε μπροο! " + ','.join(get_supported_models()))
     
     @vision.command()
