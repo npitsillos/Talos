@@ -4,8 +4,8 @@ import aiohttp
 import io
 
 from discord.ext import commands
-from mask_rcnn import *
-from helpers import *
+from dl_utils.vision import *
+from dl_utils.helpers import *
 from exceptions import *
 from PIL import Image
 

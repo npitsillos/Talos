@@ -2,7 +2,8 @@ import discord
 import logging
 
 from discord.ext import commands
-from helpers import *
+from rl_utils.agent import Agent
+from rl_utils.helpers import *
 from exceptions import *
 
 logging.basicConfig(level=logging.INFO)
@@ -64,7 +65,7 @@ class Env(commands.Cog):
             agent = Agent(gym_name)
             self.env_agents[gym_name.lower()] = agent
             
-            await agent.train()
+            train_dict = await agent.train()
             env_role = await self.guild.create_role(name="Agent-" + gym_name, mentionable=True)
             await ctx.message.author.add_roles(env_role)
             overwrites = {
@@ -75,7 +76,11 @@ class Env(commands.Cog):
             }
             category = await self.guild.create_category(name=env_name, overwrites=overwrites)
             testing_channel = await self.guild.create_text_channel(name=gym_name, category=category)
-            await testing_channel.send("Κοπέλια έμαθα τα ούλλα.")
+            await testing_channel.send("Κοπέλια έμαθα τα ούλλα. Το λοιπόν...")
+            await testing_channel.send("Εμάχουμουν για {0} επισόδεια τζαι έπια {1}. After {0} episodes I scored {1}".format(train_dict["num_eps"], train_dict["avg_score"]))
+
+            emb = discord.Embed(title="Q-Table", description=train_dict["q_table"])
+            await testing_channel.send(train_dict["q_table"])
         except EnvironmentNameNotProvidedException:
             await ctx.channel.send("Δώσμου όνομα. Environment name not provided.")
         except EnvironmentIsNotSupportedException:
@@ -90,7 +95,12 @@ class Env(commands.Cog):
             gym_name = ctx.channel.name
             
             agent = self.env_agents[gym_name]
-            agent.test()
+            episodes = await agent.test()
+            for key in episodes.keys():
+                episode = episodes[key]
+                for step in episode:
+                    emb = discord.Embed(title="Action: {}".format(step["action"]), description=step["world"])
+                    await ctx.channel.send(embed=emb)
         except NotInCorrectCategoryChannelException:
             await ctx.channel.send("Πρέπει να είσαι channel του category. You have to be in the channel's category!")   
     
