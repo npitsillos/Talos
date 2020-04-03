@@ -3,7 +3,8 @@ import gym
 SUPPORTED_ENVS = {  "frozenlake":
                         {
                             "name": "FrozenLake-v0",
-                            "states": {"S": "start point, safe", "F": "frozen tile, safe", "H": "hole, fall to your doom", "G": "goal"}
+                            "states": {"S": "start point, safe", "F": "frozen tile, safe", "H": "hole, fall to your doom", "G": "goal"},
+                            "actions": ["Left","Down","Right","Up"]
                         },
                     "frozenlake8":
                         {
@@ -40,13 +41,13 @@ def get_env_details(env_name):
 
     return return_dict
 
-def get_string_respresentation_of_env(env):
+def get_string_respresentation_of_env(env, actions):
     row, col = env.s // env.ncol, env.s % env.ncol
     desc = env.desc.tolist()
     desc = [[c.decode('utf-8') for c in line] for line in desc]
     desc[row][col] = '|' + desc[row][col] + '|'
     action = None
     if env.lastaction is not None:
-        action = "{}".format(["Left","Down","Right","Up"][env.lastaction])
+        action = "{}".format(actions[env.lastaction])
     world = "\n".join(''.join(line) for line in desc)
     return action, world
