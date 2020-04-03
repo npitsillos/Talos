@@ -79,8 +79,12 @@ class Env(commands.Cog):
             await testing_channel.send("Κοπέλια έμαθα τα ούλλα. Το λοιπόν...")
             await testing_channel.send("Εμάχουμουν για {0} επισόδεια τζαι έπια {1}. After {0} episodes I scored {1}".format(train_dict["num_eps"], train_dict["avg_score"]))
 
-            emb = discord.Embed(title="Q-Table", description=train_dict["q_table"])
-            await testing_channel.send(train_dict["q_table"])
+            await testing_channel.send(train_dict["q_table"][0, :])
+            env_details = get_env_details(env_name)
+            actions = env_details["actions"]
+            await testing_channel.send("Κάθε στήλη λαλεί πόσο εννα σκοράρω περίπου αν κάμω τζήνη τη κίνηση." + 
+                "Every column shows how much reward on average we can get if we follow that action {}".format(
+                        ','.join([str(i) + " -> " + action for i, action in enumerate(actions)])))
         except EnvironmentNameNotProvidedException:
             await ctx.channel.send("Δώσμου όνομα. Environment name not provided.")
         except EnvironmentIsNotSupportedException:

@@ -86,7 +86,7 @@ class Agent():
                 
                 action = np.argmax(self.q_table[state, :])
                 new_state, reward, done, info = self.env.step(action)
-                movement, world =  get_string_respresentation_of_env(self.env)
+                movement, world =  get_string_respresentation_of_env(self.env, actions)
                 episode_steps.append({"action": movement, "world": world})
                 if done:
                     break
