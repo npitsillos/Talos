@@ -59,12 +59,9 @@ async def help(ctx, *params):
 async def contribute(ctx):
     await ctx.channel.send("Κάμε με πιο έξυπνο! https://github.com/npitsillos/Talos")
 
-def run_bot():
+def launch():
     # Load extensions
     sys.path.insert(1, os.getcwd() + '/extensions/')
     for extension in extensions:
         bot.load_extension(extension)
     bot.run(token)
-
-if __name__ == "__main__":
-    run_bot()
