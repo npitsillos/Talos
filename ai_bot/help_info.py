@@ -6,6 +6,9 @@ Display the help message for every command
 
 !contribute
 Return Github link for Talos
+
+!competitions
+Lists the top three Kaggle competitions that are currently active
 '''
 
 help_dict["env"] = '''
