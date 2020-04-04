@@ -6,6 +6,8 @@ services:
     container_name: 'talosbot'
     environment:
       TALOS_TOKEN: ${TALOS_TOKEN}
+      KAGGLE_USERNAME: ${KAGGLE_USERNAME}
+      KAGGLE_KEY: ${KAGGLE_KEY}
     restart: always
     volumes:
       - ./ai_bot:/ai_bot

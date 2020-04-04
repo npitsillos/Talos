@@ -12,7 +12,7 @@ from help_info import *
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-extensions = ['env', 'vision']
+extensions = ["env", "vision", "kaggle_cog"]
 
 token = os.getenv("TALOS_TOKEN")
 
@@ -59,16 +59,9 @@ async def help(ctx, *params):
 async def contribute(ctx):
     await ctx.channel.send("Κάμε με πιο έξυπνο! https://github.com/npitsillos/Talos")
 
-@bot.command()
-async def envs(ctx):
-    await ctx.channel.send("Προτιμώ τα Atari αλλά τέλος πάντων... {}".format(" ".join(list(SUPPORTED_ENVS.keys()))))
-
-def run_bot():
+def launch():
     # Load extensions
     sys.path.insert(1, os.getcwd() + '/extensions/')
     for extension in extensions:
         bot.load_extension(extension)
     bot.run(token)
-
-if __name__ == "__main__":
-    run_bot()
