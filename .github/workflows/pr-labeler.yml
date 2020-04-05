@@ -4,9 +4,9 @@ on:
     types: [opened]
 
 jobs:
-  pr-labeler:
+  triage:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/labeler@v2
-        env:
+        with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
