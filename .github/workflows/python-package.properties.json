@@ -1,0 +1,7 @@
+{
+    "name": "Talos Package",
+    "description": "Packages Talos on a PR to master",
+    "iconName": "python",
+    "categories": ["Python"],
+    "author": "npitsillos"
+}
