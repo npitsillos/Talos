@@ -2,9 +2,9 @@ import discord
 import logging
 
 from discord.ext import commands
-from rl_utils.agent import Agent
-from rl_utils.helpers import *
-from exceptions import *
+from talos.rl_utils.agent import Agent
+from talos.rl_utils.helpers import *
+from talos.exceptions import *
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

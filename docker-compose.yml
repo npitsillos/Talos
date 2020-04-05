@@ -10,6 +10,6 @@ services:
       KAGGLE_KEY: ${KAGGLE_KEY}
     restart: always
     volumes:
-      - ./ai_bot:/ai_bot
-    working_dir: /ai_bot
-    command: python -u bot.py
+      - .:/talos
+    working_dir: /talos
+    command: bash -c "pip install . && talos"
