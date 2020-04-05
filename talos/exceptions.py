@@ -27,3 +27,6 @@ class ModelAlreadyExistsException(Exception):
 
 class NoImagesAttachedInMessageException(Exception):
     pass
+
+class SortParamNotSupportedException(Exception):
+    pass
