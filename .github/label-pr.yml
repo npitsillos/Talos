@@ -1,0 +1,4 @@
+- regExp: ".*\\.md+$"
+  labels: ["documentation"]
+- regExp: ".*\\.py+$"
+  labels: ["feature", "fix"]

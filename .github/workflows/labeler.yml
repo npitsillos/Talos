@@ -1,0 +1,12 @@
+name: "PR Labeler"
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  triage:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: docker://decathlon/pull-request-labeler-action:2.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
