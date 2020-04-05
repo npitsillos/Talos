@@ -13,7 +13,7 @@ from talos.help_info import *
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-extensions = ["env", "vision", "kaggle_cog"]
+extensions = ["env", "vision", "kgl"]
 
 token = os.getenv("TALOS_TOKEN")
 
@@ -67,7 +67,6 @@ def launch():
     sys.path.insert(1, os.path.join(os.getcwd(), "talos", "extensions"))
     for extension in extensions:
         bot.load_extension(extension)
-    print(token)
     if token is None:
         raise ValueError("TALOS_TOKEN env variable not set!")
     bot.run(token)

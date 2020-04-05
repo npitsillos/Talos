@@ -1,4 +1,0 @@
-[console_scripts]
-talos = talos.__main__:run_bot
-talos-setup = talos.setup:run_cli
-
