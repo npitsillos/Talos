@@ -4,9 +4,9 @@ import aiohttp
 import io
 
 from discord.ext import commands
-from dl_utils.vision import *
-from dl_utils.helpers import *
-from exceptions import *
+from talos.dl_utils.vision import *
+from talos.dl_utils.helpers import *
+from talos.exceptions import *
 from PIL import Image
 
 logging.basicConfig(level=logging.INFO)

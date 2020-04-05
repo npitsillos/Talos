@@ -1,5 +1,5 @@
 import gym
-from rl_utils.helpers import get_string_respresentation_of_env
+from talos.rl_utils.helpers import get_string_respresentation_of_env
 import numpy as np
 
 ##################################

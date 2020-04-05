@@ -25,7 +25,8 @@ class Kaggle(commands.Cog):
 
     @kaggle.command()
     async def competitions(self, ctx):
-        for comp in self.api.competitions_list():
+        # get only 5 latest comps
+        for comp in self.api.competitions_list(sort_by="recentlyCreated")[:5]:
             print(comp)
 
 def setup(bot):

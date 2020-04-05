@@ -7,7 +7,8 @@ import datetime
 from discord.ext.commands import Bot
 from discord.ext import commands
 
-from help_info import *
+from talos import __version__
+from talos.help_info import *
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -21,7 +22,9 @@ bot = Bot(command_prefix="!", help_command=None)
 
 @bot.event
 async def on_ready():
+    logger.info("discordpy: {0}".format(discord.__version__))
     logger.info(bot.user.name + " is online...")
+    logger.info(__version__)
     activity = discord.Game(name="Atari games to learn! Use !help")
     await bot.change_presence(activity=activity)
 
@@ -61,7 +64,10 @@ async def contribute(ctx):
 
 def launch():
     # Load extensions
-    sys.path.insert(1, os.getcwd() + '/extensions/')
+    sys.path.insert(1, os.path.join(os.getcwd(), "talos", "extensions"))
     for extension in extensions:
         bot.load_extension(extension)
+    print(token)
+    if token is None:
+        raise ValueError("TALOS_TOKEN env variable not set!")
     bot.run(token)
