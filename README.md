@@ -2,9 +2,9 @@
 
 ### Github Actions
 <p align="center">
-    ![](https://github.com/npitsillos/Talos/workflows/greetings/badge.svg)
-    ![](https://github.com/npitsillos/Talos/workflows/talos-package/badge.svg)
-    ![](https://github.com/npitsillos/Talos/workflows/pr-labeler/badge.svg)
+    <img src="https://github.com/npitsillos/Talos/workflows/talos-package/badge.svg">
+    <img src="https://github.com/npitsillos/Talos/workflows/pr-labeler/badge.svg">
+    <img src="https://github.com/npitsillos/Talos/workflows/greetings/badge.svg">
 </p>
 
 > A discord.py bot to help learn and play with the basics of AI with a focus on DL and RL.  It uses the Open AI [gym](https://github.com/openai/gym) library to implement several toy examples of RL and hopefully DL & DRL.
