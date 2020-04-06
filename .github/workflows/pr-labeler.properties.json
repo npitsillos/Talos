@@ -1,6 +1,6 @@
  
 {
-    "name": "PR Labeler",
+    "name": "pr-labeler",
     "description": "Add labels to new PRs coming from this repo (forks not supported) based on files changed",
     "iconName": "octicon tag",
     "categories": ["Automation", "SDLC"],

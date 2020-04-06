@@ -1,5 +1,5 @@
  
-name: Greetings
+name: greetings
 
 on: [pull_request, issues]
 
