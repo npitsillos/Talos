@@ -1,4 +1,12 @@
 # Talos
+
+### Github Actions
+<p align="center">
+    ![](https://github.com/npitsillos/Talos/.github/workflows/Greetings/badge.svg)
+    ![](https://github.com/npitsillos/Talos/.github/workflows/Talos%20Package/badge.svg)
+    ![](https://github.com/npitsillos/Talos/.github/workflows/PR%20Labeler/badge.svg)
+</p>
+
 > A discord.py bot to help learn and play with the basics of AI with a focus on DL and RL.  It uses the Open AI [gym](https://github.com/openai/gym) library to implement several toy examples of RL and hopefully DL & DRL.
 
 ## Usage
@@ -32,4 +40,9 @@ The bot runs when a command is issued that is prefixed with an exclamation mark 
 ## Contributors
 * [npitsillos](https://github.com/npitsillos)
 
-# Please feel free to contribute
+### Please feel free to contribute
+<p>
+  <a href="http://makeapullrequest.com">
+    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg">
+  </a>
+</p>
