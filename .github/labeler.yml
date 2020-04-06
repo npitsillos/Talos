@@ -2,7 +2,7 @@ repo:
   - ./*
 
 feature:
-  - ./talos/*
+  - talos/*
 
 documentation:
   - ./*.md
