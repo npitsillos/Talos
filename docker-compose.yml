@@ -12,3 +12,15 @@ services:
       - .:/talos
     working_dir: /talos
     command: bash -c "pip install . && talos"
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo
+    ports:
+      - '27017:27017'
+    restart: always
+    volumes:
+      - db-data:/data/db
+volumes:
+  db-data:
+    driver: local
