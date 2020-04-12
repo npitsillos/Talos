@@ -4,11 +4,11 @@ from pymodm import MongoModel, fields, connect
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-connect("mongodb://data/talosdb")
+connect("mongodb://mongo/talosdb")
 
 class Competition(MongoModel):
 
     name = fields.CharField(required=True)
-    # created_at = fields.DateTimeField()
-    # deadline = fields.DateTimeField()
-    # url = fields.URLField()
+    created_at = fields.DateTimeField(required=True)
+    deadline = fields.DateTimeField()
+    url = fields.URLField()

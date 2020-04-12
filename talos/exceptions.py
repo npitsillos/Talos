@@ -28,5 +28,11 @@ class ModelAlreadyExistsException(Exception):
 class NoImagesAttachedInMessageException(Exception):
     pass
 
-class SortParamNotSupportedException(Exception):
+class CategoryNotSupportedException(Exception):
+    pass
+
+class CompetitionNameNotProvidedException(Exception):
+    pass
+
+class CompetitionAlreadyExistsException(Exception):
     pass
