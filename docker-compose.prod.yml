@@ -1,0 +1,6 @@
+version: '3'
+services:
+    bot:
+        build:
+            dockerfile: Dockerfile-prod
+        command:  bash -c "pip install . && talos"
