@@ -18,4 +18,4 @@ jobs:
         ec2-key: ${{ secrets.EC2_KEY }}
     - name: Deploy Talos
       run: |
-        echo "$EC2_KEY" > talos-key.pem
+        echo "$EC2_KEY" > talos-key.pem && chmod 400 talos-key.pem && ssh -i talos-key.pem ubuntu@ec2-3-8-149-83.eu-west-2.compute.amazonaws.com "mkdir test"
