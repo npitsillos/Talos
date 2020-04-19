@@ -17,4 +17,4 @@ jobs:
         aws-region: eu-west-2
     - name: Deploy Talos
       run: |
-        echo "hello" > out
+        echo ${{ secrets.EC2_KEY }} > talos-key.pem
