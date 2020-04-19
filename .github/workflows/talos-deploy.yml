@@ -22,4 +22,4 @@ jobs:
         aws-region: eu-west-2
     - name: Deploy Talos
       run: |
-        ssh -t ubuntu@ec2-3-8-149-83.eu-west-2.compute.amazonaws.com "mkdir test"
+        ssh -i talos-key.pem ubuntu@ec2-3-8-149-83.eu-west-2.compute.amazonaws.com "mkdir test"
