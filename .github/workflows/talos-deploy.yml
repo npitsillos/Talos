@@ -9,13 +9,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Setup SHH Key and Host
+      env:
+        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+        ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+        ssh-add - <<< "${{ secrets.EC2_KEY }}"
+
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: eu-west-2
-        ec2-key: ${{ secrets.EC2_KEY }}
     - name: Deploy Talos
       run: |
-        echo "$EC2_KEY" > talos-key.pem && chmod 400 talos-key.pem && ssh -i talos-key.pem ubuntu@ec2-3-8-149-83.eu-west-2.compute.amazonaws.com "mkdir test"
+        ssh -t ubuntu@ec2-3-8-149-83.eu-west-2.compute.amazonaws.com "mkdir test"
