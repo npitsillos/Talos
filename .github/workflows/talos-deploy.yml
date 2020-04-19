@@ -14,5 +14,4 @@ jobs:
         mkdir -p ~/.ssh
         echo "${{ secrets.HOST }}" > ~/.ssh/known_hosts
         eval `ssh-agent`
-        ssh-add - <<< "${{ secrets.EC2-KEY }}"
-        ssh ubuntu@ec2-3-8-149-83.eu-west-2.compute.amazonaws.com "mkdir test"
+        ssh-add - <<< "${{ secrets.EC2_KEY }}"
