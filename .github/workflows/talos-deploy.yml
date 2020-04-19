@@ -17,4 +17,4 @@ jobs:
         aws-region: eu-west-2
     - name: Deploy Talos
       run: |
-        echo ${{ secrets.EC2_KEY }} > talos_key.pem && ssh -i talos_ubuntu@ec2-3-8-149-83.eu-west-2.compute.amazonaws.com "sudo rm -rf Talos && git clone https://github.com/npitsillos/Talos"
+        echo ${{ secrets.EC2_KEY }} > talos_key.pem && ssh -i talos_ubuntu@ec2-3-8-149-83.eu-west-2.compute.amazonaws.com "mkdir test"
