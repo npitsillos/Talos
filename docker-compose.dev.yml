@@ -1,5 +1,7 @@
 version: '3'
 services:
   bot:
-    command: talos
+    build: 
+      dockerfile: Dockerfile
+    command:  bash -c "pip install -e . && talos"
     restart: "no"
