@@ -11,8 +11,8 @@ jobs:
     steps:
     - name: Setup SHH Key
       run: |
-        echo "${{ secrets.EC2_KEY }}" > talos-key.pem
-        chmod 400 talos-key.pem
+        eval 'ssh-agent'
+        ssh-add - <<< "${{ secrets.EC2_KEY }}"
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -22,4 +22,4 @@ jobs:
         aws-region: eu-west-2
     - name: Deploy Talos
       run: |
-        ssh -i talos-key.pem ubuntu@ec2-3-8-149-83.eu-west-2.compute.amazonaws.com "mkdir test"
+        ssh ubuntu@ec2-3-8-149-83.eu-west-2.compute.amazonaws.com "mkdir test"
