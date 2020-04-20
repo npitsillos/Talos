@@ -7,15 +7,6 @@ class AgentAlreadyExistsException(Exception):
 class NotInCorrectCategoryChannelException(Exception):
     pass
 
-class EnvironmentNameNotProvidedException(Exception):
-    pass
-
-class EnvironmentIsNotSupportedException(Exception):
-    pass
-
-class ModelNameNotProvidedException(Exception):
-    pass
-
 class ModelNotSupportedException(Exception):
     pass
 
@@ -28,10 +19,7 @@ class ModelAlreadyExistsException(Exception):
 class NoImagesAttachedInMessageException(Exception):
     pass
 
-class CategoryNotSupportedException(Exception):
-    pass
-
-class CompetitionNameNotProvidedException(Exception):
+class InvalidSortCategoryException(Exception):
     pass
 
 class CompetitionAlreadyExistsException(Exception):

@@ -5,7 +5,7 @@ import logging
 from kaggle.api.kaggle_api_extended import KaggleApi
 from discord.ext import commands
 
-from talos.exceptions import CategoryNotSupportedException, CompetitionNameNotProvidedException, CompetitionAlreadyExistsException
+from talos.exceptions import InvalidSortCategoryException, CompetitionAlreadyExistsException
 from talos.models import Competition
 from talos.helpers import get_kaggle_comps
 
@@ -26,6 +26,9 @@ class Kgl(commands.Cog):
     
     @commands.group()
     async def kgl(self, ctx):
+        """
+            Group of commands for interfacing with Kaggle
+        """
         self.guild = ctx.guild
         self.gid = ctx.guild.id
 
@@ -33,12 +36,12 @@ class Kgl(commands.Cog):
             await ctx.send("Εν ξέρω έτσι πράμα. Use !help")
 
     @kgl.command()
-    async def competitions(self, ctx, *params):
-        category = self.CATEGORIES[0]
-        if len(list(params)) > 0:
-            if list(params)[0] not in self.CATEGORIES: raise CategoryNotSupportedException
-            category = list(params)[0]
-        comps = await get_kaggle_comps(self.api, category=category)
+    async def competitions(self, ctx, cat="all"):
+        """
+            List competitions sorted by latest deadline
+        """
+        if cat.lower() not in self.CATEGORIES: raise InvalidSortCategoryException
+        comps = await get_kaggle_comps(self.api, category=cat.lower())
         latest_comps = [comp.__dict__ for comp in comps[:5]]
         for latest_comp in latest_comps:
             comp_desc = latest_comp["description"]
@@ -50,14 +53,16 @@ class Kgl(commands.Cog):
         
     @competitions.error
     async def competitions_error(self, ctx, error):
-        if isinstance(error.original, CategoryNotSupportedException):
+        if isinstance(error.original, InvalidSortCategoryException):
             await ctx.channel.send("The specified category is not supported!")
     
     @kgl.command()
-    async def create(self, ctx, *params):
-        if len(list(params)) == 0: raise CompetitionNameNotProvidedException
+    async def create(self, ctx, comp_name):
+        """
+            Create a competition given a name
+        """
         # use first to find matching competition from Kaggle
-        first_word = list(params)[0]
+        first_word = comp_name.split(' ')[0]
         comps = await get_kaggle_comps(self.api)
         latest_comps = [comp.__dict__ for comp in comps]
         matched_comps = []
@@ -102,10 +107,11 @@ class Kgl(commands.Cog):
     
     @create.error
     async def create_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send_help(ctx.command)
+        
         if isinstance(error.original, CompetitionAlreadyExistsException):
             await ctx.channel.send("Ρεεεε τούτο το κομπετίσιον υπάρχει!!")
-        elif isinstance(error.original, CompetitionNameNotProvidedException):
-            await ctx.channel.send("Ε δώσμου όνομα ρε!!")
 
 def setup(bot):
     bot.add_cog(Kgl(bot))
