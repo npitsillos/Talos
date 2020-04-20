@@ -5,16 +5,14 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to Amazon EC2
+    name: Deploy to Amazon EC2 tests
     runs-on: ubuntu-latest
 
     steps:
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: eu-west-2
     - name: Deploy Talos
       run: |
-        echo ${{ secrets.EC2_KEY }} > talos_key.pem && ssh -i talos_ubuntu@ec2-3-8-149-83.eu-west-2.compute.amazonaws.com "sudo rm -rf Talos && git clone https://github.com/npitsillos/Talos"
+        mkdir -p ~/.ssh
+        echo "${{ secrets.HOST }}" > ~/.ssh/known_hosts
+        eval `ssh-agent`
+        ssh-add - <<< "${{ secrets.EC2_KEY }}"
+        ssh ubuntu@ec2-3-8-149-83.eu-west-2.compute.amazonaws.com 'sudo rm -rf Talos && git clone https://github.com/npitsillos/Talos && cd Talos && echo TALOS_TOKEN="${{ secrets.TALOS_TOKEN }}" > .env && echo KAGGLE_USERNAME="${{ secrets.KAGGLE_USERNAME }}" >> .env && echo KAGGLE_KEY="${{ secrets.KAGGLE_KEY }}" >> .env && docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d'
