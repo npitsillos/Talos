@@ -15,4 +15,4 @@ jobs:
         echo "${{ secrets.HOST }}" > ~/.ssh/known_hosts
         eval `ssh-agent`
         ssh-add - <<< "${{ secrets.EC2_KEY }}"
-        ssh ubuntu@ec2-3-8-149-83.eu-west-2.compute.amazonaws.com 'sudo rm -rf Talos && git clone https://github.com/npitsillos/Talos && cd Talos && echo TALOS_TOKEN="${{ secrets.TALOS_TOKEN }}" > .env && echo KAGGLE_USERNAME="${{ secrets.KAGGLE_USERNAME }}" >> .env && echo KAGGLE_KEY="${{ secrets.KAGGLE_KEY }}" >> .env && docker-compose -f docker-compose.yml -f docker-compose.prod.yml up'
+        ssh ubuntu@ec2-3-8-149-83.eu-west-2.compute.amazonaws.com 'sudo rm -rf Talos && git clone https://github.com/npitsillos/Talos && cd Talos && echo TALOS_TOKEN="${{ secrets.TALOS_TOKEN }}" > .env && echo KAGGLE_USERNAME="${{ secrets.KAGGLE_USERNAME }}" >> .env && echo KAGGLE_KEY="${{ secrets.KAGGLE_KEY }}" >> .env && docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d'
