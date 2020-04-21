@@ -41,7 +41,6 @@ class Kgl(commands.Cog):
             List competitions sorted by latest deadline
         """
         if cat.lower() not in self.CATEGORIES: raise InvalidSortCategoryException
-        await ctx.channel.send(cat)
         comps = await get_kaggle_comps(self.api, category=cat.lower())
         latest_comps = [comp.__dict__ for comp in comps[:5]]
         for latest_comp in latest_comps:
@@ -91,7 +90,7 @@ class Kgl(commands.Cog):
             category = await self.guild.create_category(name=comp_cat_name, overwrites=overwrites)
             general_channel = await self.guild.create_text_channel(name='general', category=category)
             
-            logger.info(Competition(name=category, url=matched_comp["url"], created_at=datetime.datetime.now(), deadline=matched_comp["deadline"]).save())
+            Competition(name=category, url=matched_comp["url"], created_at=datetime.datetime.now(), deadline=matched_comp["deadline"]).save()
             
             await general_channel.send("@here Άτε κοπέλια..!")
         elif len(matched_comps) > 1:
