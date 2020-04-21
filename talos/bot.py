@@ -8,7 +8,6 @@ from discord.ext.commands import Bot
 from discord.ext import commands
 
 from talos import __version__
-from talos.help_info import *
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
