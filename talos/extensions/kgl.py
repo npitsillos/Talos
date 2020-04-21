@@ -41,6 +41,7 @@ class Kgl(commands.Cog):
             List competitions sorted by latest deadline
         """
         if cat.lower() not in self.CATEGORIES: raise InvalidSortCategoryException
+        await ctx.channel.send(cat)
         comps = await get_kaggle_comps(self.api, category=cat.lower())
         latest_comps = [comp.__dict__ for comp in comps[:5]]
         for latest_comp in latest_comps:
