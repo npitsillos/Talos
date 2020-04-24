@@ -9,8 +9,8 @@ services:
       KAGGLE_KEY: ${KAGGLE_KEY}
     restart: always
     volumes:
-      - .:/talos
-    working_dir: /talos
+      - .:/talosbot
+    working_dir: /talosbot
     depends_on:
       - mongo
   mongo:
