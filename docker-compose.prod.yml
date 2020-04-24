@@ -3,4 +3,4 @@ services:
     bot:
         build:
             dockerfile: Dockerfile-prod
-        command:  bash -c "pip install . && talos"
+        command:  talos
